@@ -2,13 +2,17 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import WebDriverException as WDE
+from selenium.common.exceptions import NoSuchElementException
 
 import pyautogui as pg
 import time
 import pickle
 import os.path
 
-driver = webdriver.Chrome()
+options = webdriver.ChromeOptions()
+options.add_argument("headless")
+
+driver = webdriver.Chrome(options=options)
 url = 'https://dorm.andong.ac.kr/etrappl/chk_self_cond.php'
 driver.get(url)
 driver.maximize_window()
@@ -35,10 +39,12 @@ def default(student_num,birth,password):
 
     driver.find_element_by_xpath('/html/body/div[1]/form/div[4]/input[1]').click()
     #입력 버튼 click
-
-    driver.find_element_by_xpath('//*[@id="proceed-button"]').click()
-    #insecure warning click
-
+    time.sleep (1)
+    try:
+        driver.find_element_by_xpath('//*[@id="proceed-button"]').click()
+        #insecure warning click
+    except (NoSuchElementException):
+        pass
     time.sleep(0.5)
     #due to loading
 
@@ -54,7 +60,7 @@ def check ():
     alert.accept()
     time.sleep(2)
     a = pg.alert(text='자가진단이 완료되었습니다', title='ANU Dorm COVID Self Check Assistant', button='OK')
-    return True
+    driver.quit()
 
 def SaveInformation ():
     student_num = pg.prompt(text='학번을 입력하세요', title='ANU Dorm COVID Self Check Assistant', default='20220987')
