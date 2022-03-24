@@ -4,15 +4,24 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import WebDriverException as WDE
 from selenium.common.exceptions import NoSuchElementException
 
+import chromedriver_autoinstaller
+
 import pyautogui as pg
 import time
 import pickle
 import os.path
 
+try: 
+    path = chromedriver_autoinstaller.install() 
+    #driver = webdriver.Chrome(path) 
+except FileNotFoundError as err: 
+    a = pg.alert(text='크롬 브라우저를 설치하세요.', title='ANU Dorm COVID Self Check Assistant', button='OK')
+    exit() 
+
 options = webdriver.ChromeOptions()
 options.add_argument("headless")
 
-driver = webdriver.Chrome(options=options)
+driver = webdriver.Chrome(path, options=options)
 url = 'https://dorm.andong.ac.kr/etrappl/chk_self_cond.php'
 driver.get(url)
 driver.maximize_window()
@@ -61,6 +70,7 @@ def check ():
     time.sleep(2)
     a = pg.alert(text='자가진단이 완료되었습니다', title='ANU Dorm COVID Self Check Assistant', button='OK')
     driver.quit()
+    exit()
 
 def SaveInformation ():
     student_num = pg.prompt(text='학번을 입력하세요', title='ANU Dorm COVID Self Check Assistant', default='20220987')
