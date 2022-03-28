@@ -1,9 +1,10 @@
--# anu_dorm_selfcheck
+# anu_dorm_selfcheck
 Automate ANU dorm selfcheck (due to HTTP problem)
 
 ## Requirements
  * pyautogui
  * selenium
+ * chromedriver_autoinstaller
 
 ## What This Program Does
 * Due to the HTTP problem, I have to automate the selfcheck process.
