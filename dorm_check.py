@@ -69,8 +69,7 @@ def check ():
     alert.accept()
     time.sleep(2)
     a = pg.alert(text='자가진단이 완료되었습니다', title='ANU Dorm COVID Self Check Assistant', button='OK')
-    driver.quit()
-    exit()
+    exitProgram()
 
 def SaveInformation ():
     student_num = pg.prompt(text='학번을 입력하세요', title='ANU Dorm COVID Self Check Assistant', default='20220987')
@@ -101,9 +100,15 @@ def CheckInfor():
             checkbox = pg.confirm(text='오늘 자가진단을 제출하지 않았습니다. 자동으로 제출하시겠습니까?', title='ANU Dorm COVID Self Check Assistant', buttons=['OK','Cancel'])
             if checkbox == 'OK':
                 check()
+        else:
+            exitProgram()
     except NameError:
         InformationError()
 if not (os.path.isfile('dorm_check_information.bin')):
     SaveInformation()
+
+def exitProgram():
+    driver.quit()
+    exit()
 
 loadInformation()
